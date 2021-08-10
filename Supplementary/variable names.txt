@@ -1,0 +1,35 @@
+Analysis - remove
+
+Trial 						# trial_nr
+
+Trial - Correct					# correct_trial
+Trial - Incorrect 				# incorrect_trial	
+Trial - Omission 				# omission_trial	
+Trial - Correction Trial 			# correction_trial
+	
+Trial - Cue Position 				# cue_position_rewarded	
+Trial - Other Cue Positio 			# cue_position_nonrewarded
+
+Trial - Correct Initiation Touch 		# initiation_touch_correct
+Trial - Incorrect Initiation Touch		# initiation_touch_incorrect
+Trial - Blank Initiation Touch			# initiation_touch_blank
+
+Trial - Correct Perseverative Touch		# perseverative_touch_correct
+Trial - Incorrect Perseverative Touches		# perseverative_touch_incorrect
+Trial - Blank Perseverative Touch		# perseverative_touch_blank
+
+Trial - Correct Consume Touch			# consume_touch_correct
+Trial - Incorrect Consume Touches		# consume_touch_incorrect
+Trial - Blank Consume Touch			# consume_touch_blank
+
+Trial - Correct Timeout Touch			# timeout_touch_correct
+Trial - Incorrect Timeout Touch			# timeout_touch_incorrect
+Trial - Blank Timeout Touch			# timeout_touch_blank
+
+Trial - Correct ITI Touch			# iti_touch_correct
+Trial - Incorrect ITI Touch			# iti_touch_incorrect
+Trial - Blank ITI Touch				# iti_touch_blank
+
+Initiation Latency				# initiation_latency
+Response Latency				# response_latency
+Reward Latency					# reward_latency
