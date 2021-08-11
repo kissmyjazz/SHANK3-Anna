@@ -5,19 +5,21 @@ library(tidyverse)
 
 file_path <- "\\\\nimhlabstore-a.nimh.nih.gov\\lab\\SBN\\Chudasama\\Anna\\SHANK\\Trialwise Data Updated 2021-08-10"
 
+test_file_path <- "\\\\nimhlabstore-a.nimh.nih.gov\\lab\\SBN\\Chudasama\\Anna\\SHANK\\test_sandbox"
+
 ingest_data <- function(fpath, output_name = NULL) {
   if(!dir.exists(fpath)) {
     stop("Please provide the correct path to the files' directory")
   }
 
   # extract the list of filepaths
-  flist <- list.files(file_path, pattern = "*.csv", full.names = TRUE)
+  flist <- list.files(fpath, pattern = "*.csv", full.names = TRUE)
 
   # list of file names
   fname <- map(flist, basename)
 
   # column names
-  varnames <- c("skip", "trial_nr", "correct_trial", "incorrect_trial",
+  varnames <- c("skip", "skip2", "trial_nr", "correct_trial", "incorrect_trial",
                 "omission_trial", "correction_trial", "cue_position_rewarded",
                 "cue_position_nonrewarded", "initiation_touch_correct",
                 "initiation_touch_incorrect", "initiation_touch_blank",
@@ -26,8 +28,8 @@ ingest_data <- function(fpath, output_name = NULL) {
                 "consume_touch_incorrect", "consume_touch_blank",
                 "timeout_touch_correct", "timeout_touch_incorrect",
                 "timeout_touch_blank", "iti_touch_correct", "iti_touch_incorrect",
-                "iti_touch_blank", "initiation_latency", "response_latency",
-                'reward_latency')
+                "iti_touch_blank", "response_latency",
+                "reward_latency", "initiation_latency")
 
   df <- flist %>% purrr::map(read_csv, skip = 13,
                                        col_names = varnames,
@@ -36,7 +38,7 @@ ingest_data <- function(fpath, output_name = NULL) {
                              col_types = cols())  %>%
     set_names(fname) %>%
     bind_rows(.id = "file_name") %>%
-    dplyr::mutate(skip = NULL,
+    dplyr::mutate(skip = NULL, skip2 = NULL,
                   fname = map(file_name, stringr::str_split_fixed,
                               pattern = "[_\\.]", n = 6),
                   date = map_chr(fname, 1) %>% as.Date(format = "%Y-%m-%d"),
@@ -44,6 +46,9 @@ ingest_data <- function(fpath, output_name = NULL) {
                   sex = map_chr(fname, 3) %>% factor(),
                   genotype = map_chr(fname, 4) %>% factor(),
                   protocol = map_chr(fname, 5) %>% factor(),
+                  response_latency = dplyr::na_if(response_latency, 0),
+                  reward_latency = dplyr::na_if(reward_latency, 0),
+                  initiation_latency = dplyr::na_if(initiation_latency, 0),
                   fname = NULL) %>%
     dplyr::select(date:protocol, everything()) %>%
     # filter out rows with lots of missing values
@@ -55,4 +60,5 @@ ingest_data <- function(fpath, output_name = NULL) {
   invisible(df)
 }
 
-df <- ingest_data(file_path, "all_data")
+df <- ingest_data(test_file_path, "test_data")
+write_csv(df, "\\\\nimhlabstore-a.nimh.nih.gov\\lab\\SBN\\Chudasama\\Anna\\SHANK\\test_sandbox\\joined_data.csv")
