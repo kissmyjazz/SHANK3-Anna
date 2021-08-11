@@ -42,7 +42,7 @@ ingest_data <- function(fpath, output_name = NULL) {
                   date = map_chr(fname, 1) %>% as.Date(format = "%Y-%m-%d"),
                   animal_id = map_chr(fname, 2) %>% factor(),
                   sex = map_chr(fname, 3) %>% factor(),
-                  phenotype = map_chr(fname, 4) %>% factor(),
+                  genotype = map_chr(fname, 4) %>% factor(),
                   protocol = map_chr(fname, 5) %>% factor(),
                   fname = NULL) %>%
     dplyr::select(date:protocol, everything()) %>%
