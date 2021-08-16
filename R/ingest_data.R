@@ -36,16 +36,16 @@ ingest_data <- function(fpath, output_name = NULL) {
                                        na = "",
                                        trim_ws = TRUE,
                              col_types = cols())  %>%
-    set_names(fname) %>%
-    bind_rows(.id = "file_name") %>%
+    purrr::set_names(fname) %>%
+    dplyr::bind_rows(.id = "file_name") %>%
     dplyr::mutate(skip = NULL, skip2 = NULL,
-                  fname = map(file_name, stringr::str_split_fixed,
+                  fname = purrr::map(file_name, stringr::str_split_fixed,
                               pattern = "[_\\.]", n = 6),
-                  date = map_chr(fname, 1) %>% as.Date(format = "%Y-%m-%d"),
-                  animal_id = map_chr(fname, 2) %>% factor(),
-                  sex = map_chr(fname, 3) %>% factor(),
-                  genotype = map_chr(fname, 4) %>% factor(),
-                  protocol = map_chr(fname, 5) %>% factor(),
+                  date = purrr::map_chr(fname, 1) %>% as.Date(format = "%Y-%m-%d"),
+                  animal_id = purrr::map_chr(fname, 2) %>% factor(),
+                  sex = purrr::map_chr(fname, 3) %>% factor(),
+                  genotype = purrr::map_chr(fname, 4) %>% factor(),
+                  protocol = purrr::map_chr(fname, 5) %>% factor(),
                   response_latency = dplyr::na_if(response_latency, 0),
                   reward_latency = dplyr::na_if(reward_latency, 0),
                   initiation_latency = dplyr::na_if(initiation_latency, 0),
@@ -54,7 +54,9 @@ ingest_data <- function(fpath, output_name = NULL) {
     # filter out rows with lots of missing values
     dplyr::filter(!rowSums(is.na(.)) >= 20)
   if(!is.null(output_name)) {
-    out_path <- paste0(fpath, paste0("\\", output_name, ".rds"))
+    dir.create(paste0(fpath, "\\joined_data"))
+    Sys.chmod(list.dirs(fpath), "777")
+    out_path <- paste0(fpath, "\\joined_data", paste0("\\", output_name, ".rds"))
     write_rds(df, out_path)
   }
   invisible(df)
