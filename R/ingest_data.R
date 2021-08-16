@@ -53,6 +53,7 @@ ingest_data <- function(fpath, output_name = NULL) {
     dplyr::select(date:protocol, everything()) %>%
     # filter out rows with lots of missing values
     dplyr::filter(!rowSums(is.na(.)) >= 20) %>%
+    # filter out data where initiation latency is NA
     dplyr::filter(!is.na(initiation_latency))
 
   if(!is.null(output_name)) {
