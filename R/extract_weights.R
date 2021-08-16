@@ -9,7 +9,7 @@ extract_weights <- function(fpath) {
     tidyr::pivot_longer(-animal_id, names_to = "date", values_to = "weight",
                         values_drop_na = TRUE,
                         names_transform = list(date = as.numeric)) %>%
-    mutate(date = lubridate::as_date(date, origin = "1899-12-30"),
+    dplyr::mutate(date = lubridate::as_date(date, origin = "1899-12-30"),
            animal_id = substr(animal_id, 3, 6))
 
   invisible(df)
