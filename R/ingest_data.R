@@ -16,7 +16,7 @@ ingest_data <- function(fpath, output_name = NULL) {
   flist <- list.files(fpath, pattern = "*.csv", full.names = TRUE)
 
   # list of file names
-  fname <- map(flist, basename)
+  fname <- purrr::map(flist, basename)
 
   # column names
   varnames <- c("skip", "skip2", "trial_nr", "correct_trial", "incorrect_trial",
@@ -52,7 +52,9 @@ ingest_data <- function(fpath, output_name = NULL) {
                   fname = NULL) %>%
     dplyr::select(date:protocol, everything()) %>%
     # filter out rows with lots of missing values
-    dplyr::filter(!rowSums(is.na(.)) >= 20)
+    dplyr::filter(!rowSums(is.na(.)) >= 20) %>%
+    dplyr::filter(!is.na(initiation_latency))
+
   if(!is.null(output_name)) {
     dir.create(paste0(fpath, "\\joined_data"))
     Sys.chmod(list.dirs(fpath), "777")
